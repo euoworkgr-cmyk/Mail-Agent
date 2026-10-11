@@ -1,0 +1,21 @@
+[Unit]
+Description=Telegram bot using Polza.ai API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=telegrambot
+Group=telegrambot
+WorkingDirectory=/opt/telegram-polza-bot
+ExecStart=/opt/telegram-polza-bot/.venv/bin/python /opt/telegram-polza-bot/bot.py
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/telegram-polza-bot
+
+[Install]
+WantedBy=multi-user.target
