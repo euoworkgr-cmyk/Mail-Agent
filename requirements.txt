@@ -1,2 +1,2 @@
 openai>=1.30,<3
-python-telegram-bot>=21,<23
+python-telegram-bot[socks]>=21,<23
