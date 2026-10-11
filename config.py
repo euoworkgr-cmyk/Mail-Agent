@@ -6,6 +6,9 @@
 TELEGRAM_BOT_TOKEN = "ВСТАВЬТЕ_ТОКЕН_ОТ_BOTFATHER"
 POLZA_API_KEY = "ВСТАВЬТЕ_ЛИЧНЫЙ_КЛЮЧ_POLZA"
 
+# SOCKS-прокси sing-box на сервере. Пустая строка отключает прокси.
+TELEGRAM_PROXY = "socks5://127.0.0.1:1080"
+
 # Актуальные идентификаторы проверены в каталоге Polza.ai.
 MODELS = {
     "haiku": {"name": "Claude Haiku 5.5", "id": "anthropic/claude-haiku-5.5"},
