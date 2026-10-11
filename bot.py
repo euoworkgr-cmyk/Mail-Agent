@@ -122,11 +122,12 @@ def main() -> None:
     if "ВСТАВЬТЕ_" in config.TELEGRAM_BOT_TOKEN or "ВСТАВЬТЕ_" in config.POLZA_API_KEY:
         raise SystemExit("Заполните TELEGRAM_BOT_TOKEN и POLZA_API_KEY в config.py")
     builder = Application.builder().token(config.TELEGRAM_BOT_TOKEN)
-    if config.TELEGRAM_PROXY:
+    telegram_proxy = getattr(config, "TELEGRAM_PROXY", "socks5://127.0.0.1:1080")
+    if telegram_proxy:
         # Telegram использует отдельные HTTP-клиенты для API-запросов и polling.
-        api_request = HTTPXRequest(proxy=config.TELEGRAM_PROXY, connect_timeout=30)
+        api_request = HTTPXRequest(proxy=telegram_proxy, connect_timeout=30)
         updates_request = HTTPXRequest(
-            proxy=config.TELEGRAM_PROXY,
+            proxy=telegram_proxy,
             connect_timeout=30,
             read_timeout=30,
         )
