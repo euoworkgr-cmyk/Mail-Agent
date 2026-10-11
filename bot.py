@@ -8,6 +8,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ChatAction
 from telegram.ext import (Application, CallbackQueryHandler, CommandHandler,
                           ContextTypes, MessageHandler, filters)
+from telegram.request import HTTPXRequest
 
 import config
 
@@ -120,7 +121,17 @@ async def handle_non_text(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 def main() -> None:
     if "ВСТАВЬТЕ_" in config.TELEGRAM_BOT_TOKEN or "ВСТАВЬТЕ_" in config.POLZA_API_KEY:
         raise SystemExit("Заполните TELEGRAM_BOT_TOKEN и POLZA_API_KEY в config.py")
-    app = Application.builder().token(config.TELEGRAM_BOT_TOKEN).build()
+    builder = Application.builder().token(config.TELEGRAM_BOT_TOKEN)
+    if config.TELEGRAM_PROXY:
+        # Telegram использует отдельные HTTP-клиенты для API-запросов и polling.
+        api_request = HTTPXRequest(proxy=config.TELEGRAM_PROXY, connect_timeout=30)
+        updates_request = HTTPXRequest(
+            proxy=config.TELEGRAM_PROXY,
+            connect_timeout=30,
+            read_timeout=30,
+        )
+        builder = builder.request(api_request).get_updates_request(updates_request)
+    app = builder.build()
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("model", choose_model))
     app.add_handler(CommandHandler("clear", clear_context))
